@@ -1,0 +1,12 @@
+.layout-row {
+  background-color: rgb(240, 160, 131);
+}
+.footer-row {
+  background-color: rgb(146, 141, 141);
+  position: fixed;
+  bottom: 0;
+  text-align: center;
+}
+.footer-content {
+  display: inline-block;
+}
