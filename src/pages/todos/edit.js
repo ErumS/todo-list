@@ -1,16 +1,16 @@
 import React from 'react';
 import Popup from "reactjs-popup";
 import { connect } from 'react-redux';
-import { addTodo } from '../../redux/actions';
+import { editTodo } from '../../redux/actions';
 
-class New extends React.Component {
+class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: this.props.open,
+      open: props.open,
       fields: {
-        task: '',
-        description: '',
+        task: props.item.task,
+        description: props.item.description,
       }
     }
 
@@ -35,9 +35,9 @@ class New extends React.Component {
   }
 
   handleSubmit = (e) => {
-    this.props.addTodo({
-      id: Math.floor(Math.random() * Math.floor(1000)),
-      fields: this.state.fields
+    this.props.editTodo({
+      id: this.props.item.id,
+      fields: this.state.fields,
     });
     this.props.close();
   }
@@ -51,7 +51,7 @@ class New extends React.Component {
           <Popup open={open} modal closeOnDocumentClick onClose={this.closeModal}>
             <div className='container px-5 py-2'>
               <div className='row'>
-                <h4>Add new task</h4>
+                <h4>Edit task</h4>
                 <div className='col'>
                   <button type='button' className='close' onClick={this.closeModal}>
                     &times;
@@ -63,7 +63,7 @@ class New extends React.Component {
                   <div className='col-3'>Task:</div>
                   <div className='col-9'>
                     <input
-                      value={this.state.task}
+                      value={this.state.fields.task}
                       onChange={this.handleChange}
                       name='task'
                     />
@@ -73,7 +73,7 @@ class New extends React.Component {
                   <div className='col-3'>Description:</div>
                   <div className='col-9'>
                     <input
-                      value={this.state.description}
+                      value={this.state.fields.description}
                       onChange={this.handleChange}
                       name='description'
                     />
@@ -93,8 +93,8 @@ class New extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    addTodo: (val) => (dispatch(addTodo(val))),
+    editTodo: (val) => (dispatch(editTodo(val))),
   }
 }
 
-export default connect(null, mapDispatchToProps)(New);
+export default connect(null, mapDispatchToProps)(Edit);

@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import addATodo from './reducers';
+import todoReducer from './reducers';
 
 const appState = combineReducers({
-  addATodo,
+  todoReducer,
 })
 
 export default appState;

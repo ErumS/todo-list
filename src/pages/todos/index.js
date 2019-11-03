@@ -1,6 +1,8 @@
 import React from 'react';
 import Layout from '../../themes/layout';
 import NewForm from './new';
+import EditForm from './edit';
+import DeleteForm from './delete';
 import { connect } from 'react-redux';
 
 class Index extends React.Component {
@@ -9,10 +11,15 @@ class Index extends React.Component {
     this.state = {
       data: [],
       open: false,
+      openEdit: false,
+      openDelete: false,
+      item: {},
     }
 
     this.handleNew = this.handleNew.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleUpdate = this.handleUpdate.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleNew() {
@@ -21,21 +28,55 @@ class Index extends React.Component {
     })
   }
 
+  handleUpdate(item) {
+    this.setState({
+      openEdit: true,
+      item,
+    })
+  }
+
+  handleDelete(item) {
+    this.setState({
+      openDelete: true,
+      item,
+    })
+  }
+
   handleClose = (a) => {
     this.setState({
       open: false,
+      openEdit: false,
+      openDelete: false,
     })
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    let data = this.state.data.concat({id: nextProps.todo.addATodo.data.id, task: nextProps.todo.addATodo.data.fields.task, description: nextProps.todo.addATodo.data.fields.description})
+    const todo = nextProps.todo.todoReducer;
+    const stateData = this.state.data;
+    let data = stateData;
+    if(todo.type === 'ADD_TODO')
+      data = stateData.concat({id: todo.data.id, task: todo.data.fields.task, description: todo.data.fields.description})
+    else if(todo.type === 'EDIT_TODO'){
+      stateData.forEach(item => {
+        if(item.id === todo.data.id){
+          item.task = todo.data.fields.task;
+          item.description = todo.data.fields.description;
+        }
+      })
+      data = stateData;
+    }
+    else if(todo.type === 'DELETE_TODO') {
+      data = stateData.filter(function(ele){
+        return ele.id !== todo.data.id;
+      });
+    }
     this.setState({
       data,
     })
   }
 
   render() {
-    const { data, open } = this.state;
+    const { data, open, openEdit, openDelete } = this.state;
     
     return (      
       <div>
@@ -61,8 +102,18 @@ class Index extends React.Component {
                     <td>{item.id}</td>
                     <td>{item.task}</td>
                     <td>{item.description}</td>
-                    <td><button>EDIT</button></td>
-                    <td><button>DELETE</button></td>
+                    <td>
+                      <button onClick={() => this.handleUpdate(item)}>
+                        EDIT
+                      </button>
+                      {openEdit && <EditForm open={true} close={this.handleClose} item={this.state.item} />}
+                    </td>
+                    <td>
+                      <button onClick={() => this.handleDelete(item)}>
+                        DELETE
+                      </button>
+                      {openDelete && <DeleteForm open={true} close={this.handleClose} itemId={this.state.item.id} />}
+                    </td>
                   </tr>
                 )} 
               </tbody>
