@@ -10,3 +10,26 @@
 .footer-content {
   display: inline-block;
 }
+.new-todo {
+  background-color: antiquewhite;
+  cursor: pointer;
+  float: right;
+}
+.hr {
+  color: black;
+  background-color: black;
+  height: 10px;
+  border-color: black;
+}
+.table {
+  display: inline-block;
+  width: auto !important;
+}
+.table-div {
+  text-align: center;
+}
+.table * td {
+  padding: 30px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
