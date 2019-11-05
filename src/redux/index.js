@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import todoReducer from './reducers';
+import { addReducer, editReducer, deleteReducer } from './reducers';
 
 const appState = combineReducers({
-  todoReducer,
+  add: addReducer,
+  edit: editReducer,
+  delete: deleteReducer,
 })
 
 export default appState;

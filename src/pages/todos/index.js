@@ -51,23 +51,25 @@ class Index extends React.Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const todo = nextProps.todo.todoReducer;
+    const addTodo = nextProps.add;
+    const editTodo = nextProps.edit;
+    const deleteTodo = nextProps.delete;
     const stateData = this.state.data;
     let data = stateData;
-    if(todo.type === 'ADD_TODO')
-      data = stateData.concat({id: todo.data.id, task: todo.data.fields.task, description: todo.data.fields.description})
-    else if(todo.type === 'EDIT_TODO'){
+    if(addTodo.type === 'ADD_TODO')
+      data = stateData.concat({id: addTodo.data.id, task: addTodo.data.fields.task, description: addTodo.data.fields.description})
+    else if(editTodo.type === 'EDIT_TODO'){
       stateData.forEach(item => {
-        if(item.id === todo.data.id){
-          item.task = todo.data.fields.task;
-          item.description = todo.data.fields.description;
+        if(item.id === editTodo.data.id){
+          item.task = editTodo.data.fields.task;
+          item.description = editTodo.data.fields.description;
         }
       })
       data = stateData;
     }
-    else if(todo.type === 'DELETE_TODO') {
+    else if(deleteTodo.type === 'DELETE_TODO') {
       data = stateData.filter(function(ele){
-        return ele.id !== todo.data.id;
+        return ele.id !== deleteTodo.data.id;
       });
     }
     this.setState({
@@ -125,8 +127,12 @@ class Index extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  todo: state,
-})
+const mapStateToProps = (state) => {
+  return {
+    add: state.add,
+    edit: state.edit,
+    delete: state.delete,
+  }
+}
 
 export default connect(mapStateToProps, null)(Index)
