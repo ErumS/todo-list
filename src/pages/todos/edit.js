@@ -37,7 +37,8 @@ class Edit extends React.Component {
   handleSubmit = (e) => {
     this.props.editTodo({
       id: this.props.item.id,
-      fields: this.state.fields,
+      task: this.state.fields.task,
+      description: this.state.fields.description,
     });
     this.props.close();
   }
