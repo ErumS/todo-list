@@ -9,7 +9,6 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
       open: false,
       openEdit: false,
       openDelete: false,
@@ -50,35 +49,8 @@ class Index extends React.Component {
     })
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    const addTodo = nextProps.add;
-    const editTodo = nextProps.edit;
-    const deleteTodo = nextProps.delete;
-    const stateData = this.state.data;
-    let data = stateData;
-    if(addTodo.type === 'ADD_TODO')
-      data = stateData.concat({id: addTodo.data.id, task: addTodo.data.fields.task, description: addTodo.data.fields.description})
-    else if(editTodo.type === 'EDIT_TODO'){
-      stateData.forEach(item => {
-        if(item.id === editTodo.data.id){
-          item.task = editTodo.data.fields.task;
-          item.description = editTodo.data.fields.description;
-        }
-      })
-      data = stateData;
-    }
-    else if(deleteTodo.type === 'DELETE_TODO') {
-      data = stateData.filter(function(ele){
-        return ele.id !== deleteTodo.data.id;
-      });
-    }
-    this.setState({
-      data,
-    })
-  }
-
   render() {
-    const { data, open, openEdit, openDelete } = this.state;
+    const { open, openEdit, openDelete } = this.state;
     
     return (      
       <div>
@@ -99,8 +71,9 @@ class Index extends React.Component {
                 </tr>
               </thead>
               <tbody>
-                {data.map((item) =>
-                  <tr>
+                {
+                  this.props.todos.map((item) =>
+                  <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.task}</td>
                     <td>{item.description}</td>
@@ -128,11 +101,7 @@ class Index extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-    add: state.add,
-    edit: state.edit,
-    delete: state.delete,
-  }
+  return state.allTodos
 }
 
 export default connect(mapStateToProps, null)(Index)

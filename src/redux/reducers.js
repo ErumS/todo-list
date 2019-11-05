@@ -1,53 +1,30 @@
-const addReducer = (state = {
-  data: {},
-  type: ''
-}, action) => {
+const initialState = {
+  todos: [],
+}
+
+const reducer = (state = initialState, action) => {
   switch(action.type) {
     case 'ADD_TODO':
       return {
-        data: action.todo,
-        type: action.type
+        todos: [...state.todos, action.todo]
       }
-    default:
-      return {
-      }
-  }
-};
-
-const editReducer = (state = {
-  data: {},
-  type: ''
-}, action) => {
-  switch(action.type) {
     case 'EDIT_TODO':
       return {
-        data: action.todo,
-        type: action.type
+        todos: state.todos.map(item => (
+          item.id === action.todo.id ? { ...item, task: action.todo.task, description: action.todo.description } : item
+        ))
       }
-    default:
-      return {
-      }
-  }
-};
-
-const deleteReducer = (state = {
-  data: {},
-  type: ''
-}, action) => {
-  switch(action.type) {
     case 'DELETE_TODO':
       return {
-        data: action.todoId,
-        type: action.type
+        todos: state.todos.filter(item => (
+          item.id !== action.todoId.id
+        ))
       }
     default:
       return {
+        ...state
       }
   }
 };
 
-export {
-  addReducer,
-  editReducer,
-  deleteReducer
-};
+export default reducer;

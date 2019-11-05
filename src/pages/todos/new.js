@@ -37,7 +37,8 @@ class New extends React.Component {
   handleSubmit = (e) => {
     this.props.addTodo({
       id: Math.floor(Math.random() * Math.floor(1000)),
-      fields: this.state.fields
+      task: this.state.fields.task,
+      description: this.state.fields.description
     });
     this.props.close();
   }
