@@ -1,15 +1,16 @@
 import React from 'react';
 import './App.css';
-import Index from './pages/todos';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import appState from './redux';
-const store = createStore(appState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+import store from './redux/store';
+import Routes from './config/routes';
 
 function App() {
   return (
     <Provider store={store}>
-      <Index />
+      <Router basename="/">
+        <Routes />
+      </Router>
     </Provider>
   );
 }

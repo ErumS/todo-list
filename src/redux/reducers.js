@@ -1,30 +1,8 @@
-const initialState = {
-  todos: [],
-}
+import { combineReducers } from 'redux';
+import reducer from './todos/reducers';
 
-const reducer = (state = initialState, action) => {
-  switch(action.type) {
-    case 'ADD_TODO':
-      return {
-        todos: [...state.todos, action.todo]
-      }
-    case 'EDIT_TODO':
-      return {
-        todos: state.todos.map(item => (
-          item.id === action.todo.id ? { ...item, task: action.todo.task, description: action.todo.description } : item
-        ))
-      }
-    case 'DELETE_TODO':
-      return {
-        todos: state.todos.filter(item => (
-          item.id !== action.todoId.id
-        ))
-      }
-    default:
-      return {
-        ...state
-      }
-  }
-};
+const reducers = combineReducers({
+  allTodos: reducer,
+})
 
-export default reducer;
+export default reducers;
