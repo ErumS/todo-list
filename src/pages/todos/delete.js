@@ -1,9 +1,9 @@
 import React from 'react';
-import Popup from "reactjs-popup";
+import Delete from '../../components/actionDialog'
 import { connect } from 'react-redux';
-import { deleteTodo } from '../../redux/actions';
+import { deleteTodo } from '../../redux/todos/actions';
 
-class Delete extends React.Component {
+class DeleteForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +21,7 @@ class Delete extends React.Component {
     this.props.close();
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = () => {
     this.props.deleteTodo({
       id: this.props.itemId,
     });
@@ -32,37 +32,9 @@ class Delete extends React.Component {
     const { open } = this.state;
 
     return (
-      <div>
-        <div>
-          <Popup open={open} modal closeOnDocumentClick onClose={this.closeModal}>
-            <div className='container px-5 py-2'>
-              <div className='row'>
-                <h4>Delete task</h4>
-                <div className='col'>
-                  <button type='button' className='close' onClick={this.closeModal}>
-                    &times;
-                  </button>
-                </div>
-              </div>
-              <form onSubmit={this.handleSubmit}>
-                <div className='row px-5 py-3'>
-                  <div className='col-12'>
-                    Are you sure you want to delete the task?
-                  </div>
-                </div>
-                <div className='row px-5 py-3'>
-                  <div className='col-6'>
-                    <button type='submit'>Delete</button>
-                  </div>
-                  <div className='col-6'>
-                    <button type='button' onClick={this.closeModal}>Cancel</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </Popup>
-        </div>
-      </div>
+      <React.Fragment>
+        <Delete message="Are you sure you want to delete the task?" itemId={this.props.itemId} open={open} close={() => this.props.close()} submit={this.handleSubmit} actionName="Delete" />
+      </React.Fragment>
     )
   }
 }
@@ -73,4 +45,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Delete);
+export default connect(null, mapDispatchToProps)(DeleteForm);

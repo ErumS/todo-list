@@ -1,7 +1,6 @@
 import React from 'react';
 import Layout from '../../themes/layout';
 import NewForm from './new';
-import EditForm from './edit';
 import DeleteForm from './delete';
 import { connect } from 'react-redux';
 
@@ -51,9 +50,8 @@ class Index extends React.Component {
 
   render() {
     const { open, openEdit, openDelete } = this.state;
-    
     return (      
-      <div>
+      <React.Fragment>
         <Layout>
           <div className='container-fluid py-5'>
             <button className='new-todo' onClick={this.handleNew}>Add new Todo</button>
@@ -81,7 +79,7 @@ class Index extends React.Component {
                       <button onClick={() => this.handleUpdate(item)}>
                         EDIT
                       </button>
-                      {openEdit && <EditForm open={true} close={this.handleClose} item={this.state.item} />}
+                      {openEdit && <NewForm open={true} close={this.handleClose} item={this.state.item} />}
                     </td>
                     <td>
                       <button onClick={() => this.handleDelete(item)}>
@@ -95,7 +93,7 @@ class Index extends React.Component {
             </table>
           </div>
         </Layout>
-      </div>
+      </React.Fragment>
     )
   }
 }

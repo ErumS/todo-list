@@ -1,16 +1,16 @@
 import React from 'react';
 import Popup from "reactjs-popup";
 import { connect } from 'react-redux';
-import { addTodo } from '../../redux/actions';
+import { addTodo, editTodo } from '../../redux/todos/actions';
 
 class New extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: this.props.open,
+      open: props.open,
       fields: {
-        task: '',
-        description: '',
+        task: props.item ? props.item.task : '',
+        description: props.item ? props.item.description : '',
       }
     }
 
@@ -34,7 +34,13 @@ class New extends React.Component {
     this.props.close();
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = () => {
+    this.props.item ?
+    this.props.editTodo({
+      id: this.props.item.id,
+      task: this.state.fields.task,
+      description: this.state.fields.description,
+    }) :
     this.props.addTodo({
       id: Math.floor(Math.random() * Math.floor(1000)),
       task: this.state.fields.task,
@@ -47,47 +53,45 @@ class New extends React.Component {
     const { open } = this.state;
 
     return (
-      <div>
-        <div>
-          <Popup open={open} modal closeOnDocumentClick onClose={this.closeModal}>
-            <div className='container px-5 py-2'>
-              <div className='row'>
-                <h4>Add new task</h4>
-                <div className='col'>
-                  <button type='button' className='close' onClick={this.closeModal}>
-                    &times;
-                  </button>
+      <React.Fragment>
+        <Popup open={open} modal closeOnDocumentClick onClose={this.closeModal}>
+          <div className='container px-5 py-2'>
+            <div className='row'>
+              <h4>Add new task</h4>
+              <div className='col'>
+                <button type='button' className='close' onClick={this.closeModal}>
+                  &times;
+                </button>
+              </div>
+            </div>
+            <form onSubmit={this.handleSubmit}>
+              <div className='row px-5 py-3'>
+                <div className='col-3'>Task:</div>
+                <div className='col-9'>
+                  <input
+                    value={this.state.fields.task}
+                    onChange={this.handleChange}
+                    name='task'
+                  />
                 </div>
               </div>
-              <form onSubmit={this.handleSubmit}>
-                <div className='row px-5 py-3'>
-                  <div className='col-3'>Task:</div>
-                  <div className='col-9'>
-                    <input
-                      value={this.state.task}
-                      onChange={this.handleChange}
-                      name='task'
-                    />
-                  </div>
+              <div className='row px-5 py-3'>
+                <div className='col-3'>Description:</div>
+                <div className='col-9'>
+                  <input
+                    value={this.state.fields.description}
+                    onChange={this.handleChange}
+                    name='description'
+                  />
                 </div>
-                <div className='row px-5 py-3'>
-                  <div className='col-3'>Description:</div>
-                  <div className='col-9'>
-                    <input
-                      value={this.state.description}
-                      onChange={this.handleChange}
-                      name='description'
-                    />
-                  </div>
-                </div>
-                <div className='row px-5 py-3'>
-                  <button type='submit' className='submit-button'>Submit</button>
-                </div>
-              </form>
-            </div>
-          </Popup>
-        </div>
-      </div>
+              </div>
+              <div className='row px-5 py-3'>
+                <button type='submit' className='submit-button'>Submit</button>
+              </div>
+            </form>
+          </div>
+        </Popup>
+      </React.Fragment>
     )
   }
 }
@@ -95,6 +99,7 @@ class New extends React.Component {
 const mapDispatchToProps = (dispatch) => {
   return {
     addTodo: (val) => (dispatch(addTodo(val))),
+    editTodo: (val) => (dispatch(editTodo(val))),
   }
 }
 
